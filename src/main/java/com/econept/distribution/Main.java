@@ -18,9 +18,7 @@ public class Main {
 	 */
 	public static void main(String[] pArgument) throws Exception {
 		AsynchronousProcessActivator lActivator = new AsynchronousProcessActivator();
-		//lActivator.activate("FILE");
+		lActivator.activate("FILE");
 		lActivator.activate("ES");
-		
-		System.exit(0);
 	} // void main
 } // class Main

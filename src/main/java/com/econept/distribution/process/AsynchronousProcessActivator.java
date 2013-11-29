@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.slf4j.Logger;
@@ -129,7 +130,7 @@ public class AsynchronousProcessActivator {
 			List<AsynchronousReaderProcess> lProcesses = new ArrayList<AsynchronousReaderProcess>();
 
 			CountDownLatch lCountDownLatch = new CountDownLatch(pProcessSize);
-			Executor lExecutor = Executors.newFixedThreadPool(pProcessSize);
+			ExecutorService lExecutor = Executors.newFixedThreadPool(pProcessSize);
 			
 			for (int lProcessIndex = 0; lProcessIndex < pProcessSize; lProcessIndex++) {
 				AsynchronousReaderProcess lProcess = new AsynchronousReaderProcess(
@@ -155,6 +156,10 @@ public class AsynchronousProcessActivator {
 			lAverageElapsedTime = lAverageElapsedTime
 					+ (System.currentTimeMillis() - lElapsedTime);
 			
+			lExecutor.shutdown();
+			
+			// halt until all threads are shutting down
+			while(lExecutor.isTerminated()){}
 		} // for
 
 		lAverageElapsedTime = lAverageElapsedTime / pIteration;
